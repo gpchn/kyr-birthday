@@ -896,6 +896,39 @@ a{ color: inherit; }
   .finale__sign{ width: 100%; gap: 10px; }
 }
 
+/* ---------- 手机端性能模式 ---------- */
+@media (max-width: 820px), (pointer: coarse){
+  /* 大面积模糊光斑和混合颗粒层最耗 GPU，手机上直接关闭 */
+  .ambient,
+  .grain{ display: none; }
+
+  #petals{ opacity: .72; }
+
+  /* 少用 backdrop-filter，改成不透明底色 */
+  .hero__cue,
+  .blow,
+  .wish-result{
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .hero__cue{ background: #fffaf4; }
+  .blow{ background: #fffaf4; }
+  .wish-result{ background: #fffdf9; }
+
+  /* 去掉会随动画反复重算的滤镜 */
+  .cake,
+  .hero__age,
+  .finale__line em{ filter: none; }
+
+  /* 关闭持续性的装饰动画，保留静态构图 */
+  .cake-stage::before,
+  .cake-sprig,
+  .blow__dot,
+  .hero__cue svg,
+  .finale__deco--a,
+  .finale__deco--b{ animation: none; }
+}
+
 @media (prefers-reduced-motion: reduce){
   html{ scroll-behavior: auto; }
   *, *::before, *::after{
