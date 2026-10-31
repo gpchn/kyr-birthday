@@ -34,8 +34,6 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
   let rafId = 0;
   let lastTime = 0;
   let running = false;
-  let scrolling = false;
-  let scrollTimer = 0;
 
   /* 把花瓣预渲染成小图，避免每帧重复构建贝塞尔路径 */
   function makeSprite(color){
@@ -114,7 +112,6 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
   function frame(now){
     if (!running) return;
     rafId = requestAnimationFrame(frame);
-    if (scrolling) return;
 
     const elapsed = lastTime ? now - lastTime : (FRAME_TIME || 16.667);
     if (FRAME_TIME && elapsed < FRAME_TIME) return;
@@ -199,18 +196,6 @@ const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)
     clearTimeout(resizeTimer);
     resizeTimer = window.setTimeout(start, 180);
   });
-
-  /* 手机滑动时暂停花瓣重绘，减少滚动掉帧 */
-  if (isMobile){
-    window.addEventListener('scroll', () => {
-      scrolling = true;
-      clearTimeout(scrollTimer);
-      scrollTimer = window.setTimeout(() => {
-        scrolling = false;
-        lastTime = 0;
-      }, 140);
-    }, { passive: true });
-  }
 
   document.addEventListener('visibilitychange', () => {
     if (document.hidden){
